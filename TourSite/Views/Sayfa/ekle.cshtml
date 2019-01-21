@@ -1,0 +1,87 @@
+﻿@model TourSite.Models.Sayfa
+
+@{
+    ViewBag.Title = "ekle";
+}
+
+
+@{ViewBag.Title = "Sayfa Ekle";}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <h4>Yeni sayfa bilgileri</h4>
+                <hr />
+                @Html.ValidationSummary(true)
+                <div class="form-group">
+                    @Html.LabelFor(model => model.baslik, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.baslik, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.baslik)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.link, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.link, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.link)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.icerik, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.icerik, 10, 100, new { @class = "form-control, ckeditor" })
+                        @Html.ValidationMessageFor(model => model.icerik)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.title, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.title)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.description, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.description, 3, 100, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.description)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.keyword, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.keyword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.keyword) 
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.konum, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.konum, new SelectList(Enum.GetValues(typeof(TourSite.Models.konum_bilgisi))),
+new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.konum)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.onay, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBoxFor(model => model.onay, new { @class = "checkbox" })
+                        @Html.ValidationMessageFor(model => model.onay)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Ekle" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Sayfa listesi", "Index", null, new { @class = "btn btn-link" })
+</div>

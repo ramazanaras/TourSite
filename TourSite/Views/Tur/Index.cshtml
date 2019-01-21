@@ -1,0 +1,75 @@
+﻿@model IEnumerable<TourSite.Models.Tur>
+
+
+@{
+    ViewBag.Title = "Tur Listesi";
+}
+<h2>Tur Listesi</h2>
+<p>
+    @Html.ActionLink("Yeni Kayıt", "ekle", null, new { @class = "btn btn-success pull-right" }) <br /><br />
+</p>
+<br />
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr class="bg-info">
+                <th class="col-md-1">
+                    @Html.DisplayNameFor(model => model.id)
+                </th>
+                <th class="col-md-2">
+                    @Html.DisplayNameFor(model => model.turadi)
+                </th>
+                <th class="col-md-2">
+                    @Html.DisplayNameFor(model => model.turzamani)
+                </th>
+                <th class="col-md-4 hidden-xs">
+                    @Html.DisplayNameFor(model => model.kisabilgi)
+                </th>
+                <th class="col-md-1">
+                    @Html.DisplayNameFor(model => model.onay)
+                </th>
+                <th class="col-md-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.turadi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.turzamani)
+                    </td>
+                    <td class="hidden-xs">
+                        @Html.DisplayFor(modelItem => item.kisabilgi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.onay)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Düzelt", "duzelt", new { id = item.id }, new { @class = "btn btn-primary btn-xs" })
+                        @Html.ActionLink("Sil", "sil", new { id = item.id },
+new
+{
+    @class = "btn btn-danger btn-xs",
+    onclick = "return confirm('" + "* " + @item.turadi + " " + @item.turzamani + " * tur kaydı silinsin mi?')"
+})
+                        @Html.ActionLink("Resimler", "resimler", new { turid = item.id }, new { @class = "btn btn-warning btn-xs" })
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@*
+
+    NOT: class="hidden-xs" Bootstrap sınıfı ilgili alanın mobilde görünmemesini sağlar. class="table-responsive" Bootstrap sınıfı ise tablonun mobilde de tam görünmesi içindir
+
+*@

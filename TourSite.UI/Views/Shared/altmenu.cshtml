@@ -1,0 +1,101 @@
+﻿<div class="container-fluid footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <h3>Faydalı Bilgiler</h3>
+                <ul class="list-group">
+                    @if (Model != null)
+                    {
+                        foreach (var kayit in Model)
+                        {
+                            <li class="list-group-item"> <a href="@Url.Action("goster", "sayfa", new { sayfa = kayit.link })">@kayit.baslik</a> </li> }
+                    }
+                </ul>
+            </div>
+            <div class="col-sm-3">
+
+                <h3>
+                    Son Yorumlar
+                </h3>
+                <ul class="list-group sonyorumlar"></ul>
+            </div>
+            <div class="col-sm-3">
+                @* ŞİRKET KONUMUNU HARİTADA GÖSTERME *@
+                <h3>Şubelerimiz</h3>
+                <div style="width: 100%; height: 320px;">
+                    <div id="harita" style="width: 100%; height: 320px;"></div>
+                </div>
+
+            </div>
+            <div class="col-sm-3">
+                <h3>4.sütun</h3>
+                @* kodlar *@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*
+
+        Harita üzerinde konum bilgisini görüntülemek için Google Maps JavaScript API kullanacağız ve bunun için bir Google API anahtarına ihtiyacımız olacak.
+        https://developers.google.com/maps/documentation/javascript/get-api-key adresine girin ve bir anahtar (API key) oluşturun.
+
+        Ardından altmenu.cshtml görünüm sayfasında <script> etiketinden önce aşağıdaki <script> ifadesini ekleyin ve GOOGLE_API_KEY yazısının yerine yukarıdaki siteden oluşturduğunuz API anahtarını yazın. <script async defer src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_API_KEY" type="text/javascript"></script>
+    Haritayı görüntüleyecek JavaScript kodlarını da daha önce son yorumları listelemek için oluşturduğunuz <script> bloğu içine yazın. latitude ve longitude değişkenlerine kendi adres koordinatlarınızı atayın. JavaScript kodlarının son hali aşağıda verilmiştir.
+
+*@
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_API_KEY" type="text/javascript"></script>
+<script type="text/javascript">
+
+    function yorumlar() {
+        $(".sonyorumlar").empty();
+        $.ajax
+        ({
+            type: 'POST',
+            url: '@Url.Action("sonyorumlar","tur")',
+            dataType: 'json',
+            data: {},
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    var rows = "<li class='list-group-item'><p><b class='yorumbaslik'>" + item.turadi + "</b></p> \
+<p>" + item.yorum + "</p> \
+<span class='float-right'><i class = 'yorumadisoyadi'>" + item.adsoyad + "</i></span></li>";
+                    $('.sonyorumlar').append(rows);
+                });
+            }
+        });
+        return false;
+    }
+
+
+    function harita() {
+        var canvas = $("#harita");
+        var latitude = 41.047397;
+        var longitude = 28.426531;
+
+        var latlng = new google.maps.LatLng(latitude, longitude);
+        var options = {
+            zoom: 16,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(canvas[0], options);
+
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(latitude, longitude),
+            map: map
+        });
+    }
+
+
+
+    $(function () {
+        yorumlar();
+
+        harita();
+    });
+</script>

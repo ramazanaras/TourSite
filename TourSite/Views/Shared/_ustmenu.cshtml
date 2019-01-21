@@ -1,0 +1,50 @@
+﻿<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Application Name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav pull-right">
+                <li>@Html.ActionLink("Anasayfa", "Index", "Home")</li>
+                <li>@Html.ActionLink("Kullanıcılar", "Index", "Kullanici")</li>
+                <li>@Html.ActionLink("Sayfalar", "Index", "Sayfa")</li>
+                <li>@Html.ActionLink("Turlar", "Index", "Tur")</li>
+                <li>
+                    <a href="@Url.Action("Index", "TurYorumlari")">
+                        Tur Yorumları
+                        @if (ViewBag.yeniyorumsayisi > 0)
+                        {
+                            <span class="badge">@ViewBag.yeniyorumsayisi</span>
+                        }
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Index", "Rezervasyon")">
+                        Rezervasyonlar
+                        @if (ViewBag.yenirezsayisi > 0)
+                        {
+                            <span class="badge">@ViewBag.yenirezsayisi</span>
+                        }
+                    </a>
+                </li>
+
+
+
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@ViewBag.kullanici<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Oturumu Kapat", "logout", "Home")</li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>

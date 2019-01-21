@@ -1,0 +1,46 @@
+﻿@model IPagedList<TourSite.UI.Models.Tur>
+
+
+@using PagedList 
+@using PagedList.Mvc
+
+
+@{ViewBag.Title = "Turlarımız";}
+<h2>Turlarımız</h2> 
+
+@foreach (var item in Model)
+{
+
+    var ilkResim = item.TurResimleri.FirstOrDefault();
+
+    <hr />
+    <h3>
+        <a href="@Url.Action("detay","tur", new {turId = item.id})">
+            @Html.DisplayFor(modelItem => item.turadi)
+        </a>
+    </h3>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <a href="@Url.Action("detay","tur", new {turId = item.id})">
+                <img src="~/Content/images/@(ilkResim == null ? "kapadokya.jpg" : ilkResim.resimadi)" alt="" class="img-fluid img-thumbnail">
+            </a>
+
+        </div>
+        <div class="col-sm-9">
+            <p>@Html.DisplayFor(modelItem => item.kisabilgi)</p>
+            <span class="float-left label label-success">@Html.DisplayFor(modelItem => item.turzamani)</span>
+            <span class="float-right label label-success">@Html.DisplayFor(modelItem => item.fiyat)</span>
+        </div>
+    </div>
+}
+
+<div class="pagedList">
+    @Html.PagedListPager(Model, sayfa => Url.Action("index", new { sayfa }), PagedListRenderOptions.PageNumbersOnly)
+</div>
+
+
+
+@section slider {
+    <img src="~/Content/images/banner.jpg" alt="Alternate Text" class="img-fluid" />
+}

@@ -1,0 +1,90 @@
+﻿@model IEnumerable<TourSite.Models.TurResimleri>
+@*
+    NOT: @Request.Params["turid"] komutu tarayıcının adres satırındaki turid parametresinin değerini almak için kullanılır. (GET yöntemi)
+
+*@
+
+@{ViewBag.Title = "Resimler";}
+<h2>Resim Listesi</h2>
+<p>
+    <span class="label label-default pull-left" style="padding: 5px;"><input type="checkbox" id="hepsiniSec">&nbsp;Tümünü Seç</span>
+    @Html.ActionLink("Yeni Resim", "resimekle", new { turid = @Request.Params["turid"] }, new { @class = "btn btn-success pull-right" }) <br /><br />
+</p>
+<div class="row" style="margin-bottom: 20px;">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-2 col-sm-4 col-xs-6" id="resim-@item.id" style="padding: 10px; margin: 0px;">
+            <input type="checkbox" class="checkBox" value="@item.id" /><br />
+            <img src="~/Content/images/@Html.DisplayFor(modelItem => item.resimadi)" class="img-responsive img-thumbnail" style="height: 150px;" />
+        </div>
+    }
+</div>
+<div class="row" style="margin-top: 20px;">
+    @Html.ActionLink("Tur Listesi", "Index", null, new { @class = "btn btn-primary" })
+    <input type="button" id="sil" value="Resim Sil" class="btn btn-danger" />
+</div>
+
+@* SİLME İŞLEMİ
+
+    Ajax kodlarına baktığımızda options.url = '@Url.Action("resimsil", "tur")'; seçeneği ile seçilen resimlerin listesinin TurController sınıfının resimsil() metoduna yönlendirildiğini görürüz. Ajax kullanmaktaki amacımız, sayfayı yeniden yüklemeye gerek kalmaksızın, sayfada değişiklik yapmaktır.
+
+
+*@
+<script>
+
+    $(document).ready(function () {
+        //Tümünü Seç butonu için
+        $("#hepsiniSec").click(function () {
+            $(".checkBox").prop('checked',
+            $(this).prop('checked'));
+            $(".checkBox").each(function () {
+                if ($(this).prop('checked'))
+                    $(this).parent("div").addClass("bg-success");
+                else
+                    $(this).parent("div").removeClass("bg-success");
+            });
+        });
+        //CheckBox seçimleri için
+        $('input:checkbox.checkBox').click(function () {
+            if ($(this).prop('checked'))
+                $(this).parent("div").addClass("bg-success");
+            else
+                $(this).parent("div").removeClass("bg-success");
+        });
+        //Resim Sil butonu için
+        $("#sil").click(function () {
+            var secili = new Array();
+            $('input:checkbox.checkBox').each(function () {
+                if ($(this).prop('checked')) {
+                    secili.push($(this).val());
+                }
+            });
+            if (secili.length <= 0) {
+                alert("Seçili resim yok!");
+            }
+            else {
+                var check = confirm("Resimleri silmeyi onaylıyor musunuz?");
+                if (check == true) {
+                    var options = {};
+                    options.url = '@Url.Action("resimsil", "tur")'; 71
+
+                    options.type = "POST";
+                    options.data = JSON.stringify(secili);
+                    options.contentType = "application/json";
+                    options.dataType = "json";
+                    options.success = function (msg) {
+                        alert(msg);
+                        //Seçili resimleri ekrandan silen kod
+                        $.each(secili, function (index, value) {
+                            $("#resim-" + value).remove();
+                        });
+                    };
+                    options.error = function () {
+                        alert("Silme işleminde hata oluştu!");
+                    };
+                    $.ajax(options);
+                }
+            }
+        });
+    });
+</script>

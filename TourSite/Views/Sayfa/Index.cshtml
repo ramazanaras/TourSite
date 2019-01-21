@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TourSite.Models.Sayfa>
+
+
+@{ViewBag.Title = "Sayfa Listesi";}
+<h2>Sayfa Listesi</h2>
+<p>
+    @Html.ActionLink("Yeni Kayıt", "ekle", null, new { @class = "btn btn-success pull-right" }) <br /><br />
+</p>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr class="bg-info">
+            <th class="col-md-1">
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th class="col-md-7">
+                @Html.DisplayNameFor(model => model.baslik)
+            </th>
+            <th class="col-md-1">
+                @Html.DisplayNameFor(model => model.konum)
+            </th>
+            <th class="col-md-1">
+                @Html.DisplayNameFor(model => model.onay)
+            </th>
+            <th class="col-md-2"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.baslik)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.konum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.onay)
+                </td>
+                <td>
+                    @Html.ActionLink("Düzelt", "duzelt", new { id = item.id }, new { @class = "btn btn-primary btn-xs" })
+                    @Html.ActionLink("Sil", "sil", new { id = item.id }, new
+{
+    @class = "btn btn-danger btn-xs",
+    onclick = "return confirm('" + "* " + @item.baslik + " * kaydı silinsin mi?')"
+})
+
+                    @Html.ActionLink("Resimler", "resimler", new { sayfaid = item.id }, new { @class = "btn btn-warning btn-xs" })
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

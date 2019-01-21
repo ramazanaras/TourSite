@@ -1,0 +1,91 @@
+﻿@model TourSite.Models.Tur
+
+ 
+
+@{ViewBag.Title = "Tur Ekle";}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <h4>Yeni tur bilgileri</h4>
+                <hr />
+                @Html.ValidationSummary(true)
+                <div class="form-group">
+                    @Html.LabelFor(model => model.turadi, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.turadi, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.turadi)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.icerik, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.icerik, new { @class = "form-control, ckeditor" })
+                        @Html.ValidationMessageFor(model => model.icerik)
+                    </div> 
+
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.turzamani, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.turzamani, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.turzamani)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.kisabilgi, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.kisabilgi, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.kisabilgi)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fiyat, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.fiyat, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.fiyat)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.title, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.title)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.description, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.description)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.keyword, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.keyword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.keyword)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.onay, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBoxFor(model => model.onay, new { @class = "checkbox" })
+                        @Html.ValidationMessageFor(model => model.onay)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Ekle" class="btn btn-success" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Tur listesi", "Index", null, new { @class = "btn btn-link" })
+</div>

@@ -1,0 +1,24 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/*.footer { background-color: #088da5; }*/
+
+
+
+
+ .footer { padding:20px; background-color: #3F3F3F; } .footer h3 { font-size:18px; color:#ddd; text-transform:uppercase; width:100%; padding-bottom:10px; border-bottom:1px dotted #eee; } .footer .list-group-item { border:none; background-color: #3F3F3F; color: #ddd; } .footer p { color:#ddd; } .footer a { color:#fff; }

@@ -1,0 +1,44 @@
+﻿@model TourSite.UI.Models.Sayfa
+@{ViewBag.Title = Model.title;}
+
+
+@section slider {
+<img src="~/Content/images/banner.jpg" alt="Alternate Text" class="img-fluid" /> 
+    }
+
+
+
+
+<h2>@Html.Raw(Model.baslik)</h2>
+<hr />
+<div>
+    <p>@Html.Raw(Model.icerik)</p>
+</div>
+
+<div>
+    <div class="row">
+        @foreach (var kayit in Model.SayfaResimleri)
+        {
+            <div class="col-sm-3">
+                @*<img class="img-thumbnail" src="~/Content/images/@kayit.resimadi" style="height:150px;margin-bottom:10px;">*@
+
+                <a class="example-image-link" href="~/Content/images/@kayit.resimadi" data-lightbox="sayfa-resimleri" data-title="Diğer resimler için tıklayınız...">
+                    <img class="example-image img-thumbnail" src="~/Content/images/@kayit.resimadi" style="height:150px;margin-bottom:10px;" />
+
+
+
+</div>
+        }
+   
+    </div>
+</div>
+
+
+
+
+
+    @section etiketler {
+        <meta name="description" content="@Model.description">
+        <meta name="keywords" content="@Model.keyword">
+    }
+

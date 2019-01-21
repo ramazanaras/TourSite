@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    @RenderSection("etiketler", false)
+
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <link href="~/Content/lightbox/css/lightbox.min.css" rel="stylesheet" />
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+
+</head>
+<body>
+    
+@{Html.RenderAction("menu", "Partial");}
+    
+    @RenderSection("slider", false)
+    
+
+
+
+    <div class="container body-content" style="margin-top:10px; margin-bottom:10px;">
+        <div class="row">
+            <div class="col-sm-3">
+             @{Html.RenderAction("solmenu", "Partial");}
+            </div>
+            <div class="col-sm-9">
+                @RenderBody()
+            </div>
+
+        </div>
+
+
+    
+        <hr />
+
+     @{Html.RenderAction("altmenu", "Partial");}
+
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+
+
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Content/lightbox/js/lightbox.min.js"></script>
+
+
+    @*/*
+    detay.cshtml görünüm sayfasında doğrulama (validation) kodlarının çalışması için _Layout.cshtml sayfasında jquery.validate.js ve jquery.validate.unobtrusive.min.js dosyalarına referans oluşturmalıyız.
+    */*@
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+﻿@model TourSite.UI.Models.Rezervasyon
+@{ViewBag.Title = "Rezervasyon Detayı";}
+<div id="detay">
+    <h4>Rezervasyon Detayı</h4>
+    <table class="table table-hover">
+        <tbody>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.Tur.turadi)</td>
+                <td>@Html.DisplayFor(model => model.Tur.turadi)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.ad)</td>
+                <td>@Html.DisplayFor(model => model.ad)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.soyad)</td>
+                <td>@Html.DisplayFor(model => model.soyad)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.eposta)</td>
+                <td>@Html.DisplayFor(model => model.eposta)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.telefon)</td>
+                <td>@Html.DisplayFor(model => model.telefon)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.turtarihi)</td>
+                <td>@Html.DisplayFor(model => model.turtarihi)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.reztarihi)</td> 
+
+                <td>@Html.DisplayFor(model => model.reztarihi)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.aciklama)</td>
+                <td>@Html.DisplayFor(model => model.aciklama)</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayNameFor(model => model.onay)</td>
+                <td>@((Model.onay == true) ? "Onaylandı" : "Onaylanmadı")</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <input type="button" id="btnPrint" value="Bilgileri yazdır..." class="btn btn-success" />
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+
+    /*
+    Bilgileri yazdır… butonu tıklanınca JavaScript fonksiyonuyla detay isimli <div> etiketinin içeriği yeni bir web tarayıcı sayfasında açılarak baskı önizleme penceresi görüntülenir.
+    */
+
+    $(function () {
+        $("#btnPrint").click(function () {
+            var divContents = document.getElementById("detay").innerHTML;
+            var printWindow = window.open('', '', 'menubar=no, toolbar=no, resizable=no, height=700, width=1000');
+            printWindow.document.write('<html><head><title>Rezervasyon Detayı</title></head><body>');
+            printWindow.document.write(divContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+    });
+</script>
+@section slider {
+    <img src="~/Content/images/banner.jpg" alt="Alternate Text" class="img-fluid" />
+}

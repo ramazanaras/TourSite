@@ -1,0 +1,215 @@
+﻿@model TourSite.UI.Models.Tur
+@{ViewBag.Title = Model.title;}
+<h2>@Html.Raw(Model.turadi)</h2>
+<hr />
+@*tur resimleri için slider kodları*@
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        @{bool aktif = true;}
+        @foreach (var kayit in Model.TurResimleri)
+        {
+            <div class="carousel-item @(aktif == true ? "active" : "") ">
+                <img class="d-block w-100" src="~/Content/images/@kayit.resimadi" alt="">
+            </div>
+            aktif = false;
+        }
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+
+</div>
+@*tur zamanı ve fiyatı*@
+<div>
+    <div class="row">
+        <div class="col-sm">
+            <span class="float-left label label-success">@Html.Raw(Model.turzamani)</span>
+        </div>
+        <div class="col-sm">
+            <span class="float-right label label-success">@Html.Raw(Model.fiyat)</span>
+        </div>
+    </div>
+</div>
+@*navs kodları*@
+<div style="margin-top:15px;">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="icerik-tab" data-toggle="tab" href="#icerik" role="tab" aria-controls="icerik" aria-selected="true">Tur İçeriği</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="yorum-tab" data-toggle="tab" href="#yorum" role="tab" aria-controls="yorum" aria-selected="false">Yorumlar</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="rezervasyon-tab" data-toggle="tab" href="#rezervasyon" role="tab" aria-controls="rezervasyon" aria-selected="false">Rezervasyon</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="icerik" role="tabpanel" aria-labelledby="icerik-tab">
+            <p>
+                @Html.Raw(Model.icerik)
+            </p>
+        </div>
+        <div class="tab-pane fade" id="yorum" role="tabpanel" aria-labelledby="yorum-tab">
+
+            @*Buraya yorum ekleme ve yorum listesi kodları yazıldı*@
+            <section style="margin-top:15px;">
+                @using (Html.BeginForm("yeniyorum", "tur"))
+                {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    @Html.Hidden("tur_id", Model.id)
+                    <div class="form-group">
+                        <div class="row">
+                            @Html.LabelFor(model => model.TurYorumlari.FirstOrDefault().adsoyad, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.TurYorumlari.FirstOrDefault().adsoyad, new { @class = "form-control", Value = "" })
+                                @Html.ValidationMessageFor(model => model.TurYorumlari.FirstOrDefault().adsoyad)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            @Html.LabelFor(model => model.TurYorumlari.FirstOrDefault().eposta, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.TurYorumlari.FirstOrDefault().eposta, new { @class = "form-control", Value = "" })
+                                @Html.ValidationMessageFor(model => model.TurYorumlari.FirstOrDefault().eposta)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            @Html.LabelFor(model => model.TurYorumlari.FirstOrDefault().yorum, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.TurYorumlari.FirstOrDefault().yorum, new { @class = "form-control", id = "yorum_id" })
+                                @Html.ValidationMessageFor(model => model.TurYorumlari.FirstOrDefault().yorum)
+                                <script type="text/javascript">
+
+                                        $(function () {
+                                            $("#yorum_id").html("");
+                                        });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="submit" value="Ekle" class="btn btn-success float-right" />
+                        </div>
+                    </div>
+                </div>
+                }
+            </section>
+            <br />
+            <section>
+                @foreach (var kayit in Model.TurYorumlari.Where(kayit => kayit.onay == true))
+                {
+                    <hr />
+                    <div class="card">
+                        <h4 class="card-header">@kayit.adsoyad</h4>
+                        <div class="card-body">
+                            <p class="card-text">@kayit.yorum</p>
+                            <span class="float-right">@kayit.tarih.ToShortDateString()</span>
+                        </div>
+                    </div>
+                }
+            </section>
+
+
+
+
+        </div>
+        <div class="tab-pane fade" id="rezervasyon" role="tabpanel" aria-labelledby="rezervasyon-tab">
+            @*Buraya rezervasyon talep kodları YAZILDI*@
+
+            <section style="margin-top:15px;">
+                @using (Html.BeginForm("yenirezervasyon", "tur"))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.Hidden("tur_id", Model.id)
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.Rezervasyon.FirstOrDefault().ad, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.Rezervasyon.FirstOrDefault().ad, new { @class = "form-control", Value = "" })
+                                    @Html.ValidationMessageFor(model => model.Rezervasyon.FirstOrDefault().ad)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.Rezervasyon.FirstOrDefault().soyad, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.Rezervasyon.FirstOrDefault().soyad, new { @class = "form-control", Value = "" })
+                                    @Html.ValidationMessageFor(model => model.Rezervasyon.FirstOrDefault().soyad)
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.Rezervasyon.FirstOrDefault().eposta, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.Rezervasyon.FirstOrDefault().eposta, new { @class = "form-control", Value = "" })
+                                    @Html.ValidationMessageFor(model => model.Rezervasyon.FirstOrDefault().eposta)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.Rezervasyon.FirstOrDefault().telefon, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.Rezervasyon.FirstOrDefault().telefon, new { @class = "form-control", Value = "" })
+                                    @Html.ValidationMessageFor(model => model.Rezervasyon.FirstOrDefault().telefon)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.Rezervasyon.FirstOrDefault().turtarihi, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.Rezervasyon.FirstOrDefault().turtarihi, "{0:dd-MM-yyyy}", new { @class = "form-control", type = "date", Value = DateTime.Today.ToString("yyyy-MM-dd") })
+                                    @Html.ValidationMessageFor(model => model.Rezervasyon.FirstOrDefault().turtarihi)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                @Html.LabelFor(model => model.Rezervasyon.FirstOrDefault().aciklama, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(model => model.Rezervasyon.FirstOrDefault().aciklama, new { @class = "form-control", id = "aciklama_id" })
+                                    @Html.ValidationMessageFor(model => model.Rezervasyon.FirstOrDefault().aciklama)
+                                    <script type="text/javascript">
+
+                                        $(function () {
+                                            $("#aciklama_id").html("");
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="submit" value="Ekle" class="btn btn-success float-right" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </section>
+
+
+        </div>
+    </div>
+</div>
+@section etiketler {
+    <meta name="description" content="@Model.description">
+    <meta name="keywords" content="@Model.keyword">
+}
+@section slider {
+    <img src="~/Content/images/banner.jpg" alt="Alternate Text" class="img-fluid" />
+}

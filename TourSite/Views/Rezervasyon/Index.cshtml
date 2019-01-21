@@ -1,0 +1,455 @@
+﻿@model IEnumerable<TourSite.Models.Rezervasyon>
+
+@{ViewBag.Title = "Rezervasyon";}
+
+<h2 class="pull-left">Rezervasyon Listesi</h2>
+@using (Html.BeginForm("index", "rezervasyon"))
+{
+    <div class="pull-right col-md-6" style="margin-top:25px;">
+        <div class="col-md-10">
+            <input type="text" class="form-control pull-right" placeholder="Adı, Soyadı, Tur Adı" name="aranan">
+        </div>
+        <div class="col-md-2">
+            <input type="submit" name="ara" value="Filtrele" class="btn btn-primary pull-right">
+        </div>
+    </div>
+}
+<p></p>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr class="bg-info">
+            <th class="col-md-3">
+                @Html.DisplayNameFor(model => model.Tur.turadi)
+            </th>
+            <th class="col-md-2">
+                @Html.DisplayNameFor(model => model.ad)
+            </th>
+            <th class="col-md-2">
+                @Html.DisplayNameFor(model => model.soyad)
+            </th>
+            <th class="col-md-1">
+                @Html.DisplayNameFor(model => model.turtarihi)
+            </th>
+            <th class="col-md-1">
+                @Html.DisplayNameFor(model => model.reztarihi)
+            </th>
+            <th class="col-md-1">
+                @Html.DisplayNameFor(model => model.onay)
+            </th>
+            <th class="col-md-2"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tur.turadi)
+                </td>
+                <td class="adi-@item.id">
+                    @Html.DisplayFor(modelItem => item.ad)
+                </td>
+                <td class="soyadi-@item.id">
+                    @Html.DisplayFor(modelItem => item.soyad)
+                </td>
+                <td class="turtarihi-@item.id">
+                    @Html.DisplayFor(modelItem => item.turtarihi)
+                </td>
+                <td class="reztarihi-@item.id">
+                    @Html.DisplayFor(modelItem => item.reztarihi)
+                </td>
+                <td class="onay-@item.id">
+                    @Html.DisplayFor(modelItem => item.onay)
+                </td>
+                <td>
+                    <a href="#" class="btn btn-primary btn-xs kayitDuzelt"
+                       data-rezid="@item.id">
+                        Düzelt
+                    </a>
+                    <a href="#" class="btn btn-danger btn-xs kayitSil"
+                       data-rezid="@item.id"
+                       data-adi="@item.ad"
+                       data-soyadi="@item.soyad">
+                        Sil
+                    </a>
+
+                    <a href="#" class="btn btn-success btn-xs kayitDetay" id="@item.id"
+                       data-rezid="@item.id"
+                       data-adi="@item.ad"
+                       data-soyadi="@item.soyad"
+                       data-eposta="@item.eposta"
+                       data-telefon="@item.telefon"
+                       data-turtarihi="@item.turtarihi.ToShortDateString()"
+                       data-reztarihi="@item.reztarihi.ToShortDateString()"
+                       data-aciklama="@item.aciklama"
+                       data-turadi="@item.Tur.turadi">
+                        Detay
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@* DETAY MODAL BAŞLANGIÇ *@
+
+<!-- Detay Modal -->
+<div class="modal fade" id="detayModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Rezervasyon Detayı</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        Tur Adı
+                    </div>
+                    <div class="col-md-9">
+                        <span class="rez_turadi"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Ad
+                    </div>
+                    <div class="col-md-9">
+                        <span class="rez_adi"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Soyad
+                    </div>
+                    <div class="col-md-9">
+                        <span class="rez_soyadi"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        E-Posta
+                    </div>
+                    <div class="col-md-9">
+                        <span class="rez_eposta"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Telefon
+                    </div>
+                    <div class="col-md-9">
+                        <span class="rez_telefon"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Tur Tarihi
+                    </div>
+                    <div class="col-md-9">
+                        <span class="rez_turtarihi"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Rezervasyon Tarihi
+                    </div>
+                    <div class="col-md-9">
+                        <span class="rez_reztarihi"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+
+
+                        Açıklama
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="rez_aciklama form-control" readonly rows="4" cols="40"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Onay
+                    </div>
+                    <div class="col-md-9">
+                        <input type="checkbox" class="rez_onay">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Detay Modal Sonu-->
+@* DETAY MODAL BİTİŞ *@
+
+
+
+
+
+
+@* DÜZELT MODAL BAŞLANGIÇ *@
+
+<!-- Duzelt Modal -->
+<div class="modal fade" id="duzeltModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Rezervasyon Düzelt</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">Tur Adı</div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control r_turadi" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">Ad</div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control r_adi">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">Soyad</div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control r_soyadi">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">E-Posta</div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control r_eposta">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">Telefon</div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control r_telefon">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">Tur Tarihi</div>
+                    <div class="col-md-9">
+                        <input type="date" class="form-control r_turtarihi">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">Rezervasyon Tarihi</div>
+                    <div class="col-md-9">
+                        <input type="date" class="form-control r_reztarihi">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">Açıklama</div>
+                    <div class="col-md-9">
+                        <textarea class="form-control r_aciklama" rows="4" cols="40"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+
+
+                    <div class="col-md-3">Onay</div>
+                    <div class="col-md-9">
+                        <input type="checkbox" class="checkbox r_onay">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success kaydet" data-dismiss="modal">Kaydet</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Duzelt Modal Sonu-->
+@* DÜZELT MODAL BİTİŞ *@
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        var id;
+
+        //DETAY MODAL GÖSTERME
+        //Detay butonu ile modal form açılır ve o kaydın bilgileri modal forma aktarılır
+        $(".kayitDetay").click(function () {
+            id = $(this).attr("data-rezid");
+            $(".rez_adi").text($(this).attr("data-adi"));
+            $(".rez_soyadi").text($(this).attr("data-soyadi"));
+            $(".rez_eposta").text($(this).attr("data-eposta"));
+            $(".rez_telefon").text($(this).attr("data-telefon"));
+            $(".rez_turtarihi").text($(this).attr("data-turtarihi"));
+            $(".rez_reztarihi").text($(this).attr("data-reztarihi"));
+            $(".rez_turadi").text($(this).attr("data-turadi"));
+            $(".rez_aciklama").text($(this).attr("data-aciklama"));
+            $(".rez_onay").prop('checked', $(".onay-" + id).find(".check-box").prop('checked'));
+            $("#detayModal").modal("show");
+        });
+        //Detay modal formdaki onay işaret kutusu tıklanınca veritabanındaki onay alanı güncellenir
+        $(".rez_onay").click(function () {
+            var secili = $(".rez_onay").prop('checked');
+            var postData = {
+                rez_ID: id,
+                durum: secili
+            };
+            var options = {};
+
+            options.url = '@Url.Action("onay","rezervasyon")';
+            options.type = "POST";
+            options.data = JSON.stringify(postData);
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (msg) {
+                alert(msg);
+                //Sayfadaki kaydın işaret kutusu güncellenir
+                $(".onay-" + id).find(".check-box").prop("checked", secili);
+            };
+            options.error = function () {
+                alert("Onay işleminde hata oluştu!");
+            };
+            $.ajax(options);
+        });
+
+
+
+
+        //DÜZENLEME  İŞLEMİ
+
+        //Düzelt butonu ile modal form açılır ve ilgili kaydın bilgileri modal forma aktarılır
+        $(".kayitDuzelt").click(function () {
+            id = $(this).data("rezid");
+            var url = '@Url.Action("rezervasyonoku", "rezervasyon")';
+            $.getJSON(url, { rez_ID: id }, function (data) {
+                if (data) {
+                    $(".r_adi").val(data.r_adi);
+                    $(".r_soyadi").val(data.r_soyadi);
+                    $(".r_eposta").val(data.r_eposta);
+                    $(".r_telefon").val(data.r_telefon);
+                    $(".r_turtarihi").val(data.r_turtarihi);
+                    $(".r_reztarihi").val(data.r_reztarihi);
+                    $(".r_turadi").val(data.r_turadi);
+                    $(".r_aciklama").val(data.r_aciklama);
+                    $(".r_onay").prop('checked', data.r_onay);
+
+                    $("#duzeltModal").modal("show");
+                } else {
+                    alert("İşlemde hata oluştu!");
+                }
+            });
+        });
+
+
+        //Düzelt modal formundaki Kaydet butonu tıklanınca değişiklikler veritabanına kaydedilir 
+        $(".kaydet").click(function () {
+            var m_adi = $(".r_adi").val();
+            var m_soyadi = $(".r_soyadi").val();
+            var m_eposta = $(".r_eposta").val();
+            var m_telefon = $(".r_telefon").val();
+            var m_turtarihi = $(".r_turtarihi").val();
+            var m_reztarihi = $(".r_reztarihi").val();
+            var m_aciklama = $(".r_aciklama").val();
+            var m_onay = $(".r_onay").prop('checked');
+            var postData = {
+                id: id,
+                ad: m_adi,
+                soyad: m_soyadi,
+                eposta: m_eposta,
+                telefon: m_telefon,
+                turtarihi: m_turtarihi,
+                reztarihi: m_reztarihi,
+                aciklama: m_aciklama,
+                onay: m_onay
+            };
+            var options = {};
+            options.url = '@Url.Action("duzelt","rezervasyon")';
+            options.type = "POST";
+            options.data = JSON.stringify(postData);
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (msg) {
+                alert(msg);
+                //Sayfadaki kayıt güncellenir 
+                $(".onay-" + id).find(".check-box").prop("checked", m_onay);
+                $(".adi-" + id).text(m_adi);
+                $(".soyadi-" + id).text(m_soyadi);
+                var parts = m_turtarihi.split('-'); //yyyy-MM-dd şeklindeki tarih 
+                var yeni_turtarihi = parts[2] + '.' + parts[1] + '.' + parts[0]; //dd.MM.yyyy şekline dönüştürülür 
+                $(".turtarihi-" + id).text(yeni_turtarihi);
+                var parts = m_reztarihi.split('-');
+                var yeni_reztarihi = parts[2] + '.' + parts[1] + '.' + parts[0];
+                $(".reztarihi-" + id).text(yeni_reztarihi);
+                //Detay butonunun data değerleri güncellenir 
+                $("#" + id).attr("data-adi", m_adi);
+                $("#" + id).attr("data-soyadi", m_soyadi); 
+
+                $("#" + id).attr("data-eposta", m_eposta);
+                $("#" + id).attr("data-telefon", m_telefon);
+                $("#" + id).attr("data-turtarihi", yeni_turtarihi);
+                $("#" + id).attr("data-reztarihi", yeni_reztarihi);
+                $("#" + id).attr("data-aciklama", m_aciklama);
+                $("#" + id).attr("data-onay", m_onay);
+            };
+            options.error = function () {
+                alert("Düzeltme işleminde hata oluştu!");
+            };
+            $.ajax(options);
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //SİLME İŞLEMİ
+        //Sil butonuna tıklanınca kayıt hem veritabanından hem ekrandan silinir
+        $(".kayitSil").click(function () {
+            var sec = $(this);
+            var durum = confirm("* " + sec.data("adi") + " " + sec.data("soyadi") + " * tarafından yapılan rezervasyon silinsin mi?");
+            if (durum) {
+                var id = sec.data("rezid");
+                var postData = {
+                    yorum_ID: id
+                };
+                var options = {};
+                options.url = '@Url.Action("sil","rezervasyon")';
+                options.type = "POST";
+                options.data = JSON.stringify(postData);
+                options.contentType = "application/json";
+
+                options.dataType = "json";
+                options.success = function (msg) {
+                    alert(msg);
+                    //Kaydın olduğu satır ekrandan silinir
+                    sec.parents("tr").remove();
+                };
+                options.error = function () {
+                    alert("Silme işleminde hata oluştu!");
+                };
+                $.ajax(options);
+            }
+        });
+    });
+</script>

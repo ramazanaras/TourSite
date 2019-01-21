@@ -1,0 +1,34 @@
+﻿@model IEnumerable<TourSite.UI.Models.Sayfa>
+<div class="rezervasyondetayi">
+    <div class="card">
+        <h6 class="card-header">Rezervasyon Sorgulama</h6>
+        <div class="card-body">
+            <form action="@Url.Action("detay","rezervasyon")" method="post" name="rs">
+                <div class="form-group">
+                    <label for="eposta">E-posta Adresi</label>
+                    <input type="email" class="form-control" name="eposta" placeholder="E-posta adresiniz...">
+                </div>
+                <div class="form-group">
+                    <label for="tarih">Rezervasyon Tarihi</label>
+                    <input type="date" class="form-control" name="reztarihi" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+                <button type="submit" class="btn btn-primary">Sorgula</button>
+            </form>
+        </div>
+    </div>
+</div>
+<br />
+
+
+<ul class="list-group">
+    @if (Model != null)
+    {
+        foreach (var kayit in Model)
+        {
+            <li class="list-group-item">
+                <a href="@Url.Action("goster", "sayfa", new { sayfa = kayit.link })">@kayit.baslik</a>
+            </li>
+        }
+    }
+
+</ul>

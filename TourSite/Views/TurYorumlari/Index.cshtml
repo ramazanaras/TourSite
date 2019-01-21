@@ -1,0 +1,396 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<TourSite.Models.TurYorumlari>
+@{
+    ViewBag.Title = "Tur Yorumları";
+}
+<h2>Tur Yorumları Listesi</h2>
+<p></p>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr class="bg-info">
+            <th class="col-md-4">
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Tur.turadi)
+            </th>
+            <th class="col-md-3">
+                @Html.DisplayNameFor(model => model.FirstOrDefault().adsoyad)
+            </th>
+            <th class="col-md-2">
+                @Html.DisplayNameFor(model => model.FirstOrDefault().tarih)
+            </th>
+            <th class="col-md-1">
+                @Html.DisplayNameFor(model => model.FirstOrDefault().onay)
+            </th>
+            <th class="col-md-2"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tur.turadi)
+                </td>
+                <td class="adsoyad-@item.id">
+                    @Html.DisplayFor(modelItem => item.adsoyad)
+                </td>
+                <td class="tarih-@item.id">
+                    101
+
+                    @Html.DisplayFor(modelItem => item.tarih)
+                </td>
+                <td class="onay-@item.id">
+                    @Html.DisplayFor(modelItem => item.onay)
+                </td>
+                <td>
+                    <a href="#" class="btn btn-primary btn-xs kayitDuzelt"
+                       data-yorumid="@item.id">
+                        Düzelt
+                    </a>
+                    <a href="#" class="btn btn-danger btn-xs kayitSil"
+                       data-yorumid="@item.id"
+                       data-adisoyadi="@item.adsoyad">
+                        Sil
+                    </a>
+                    <a href="#" class="btn btn-success btn-xs kayitDetay" id="@item.id"
+                       data-yorumid="@item.id"
+                       data-adisoyadi="@item.adsoyad"
+                       data-eposta="@item.eposta"
+                       data-tarih="@item.tarih.ToShortDateString()"
+                       data-yorum="@item.yorum"
+                       data-turadi="@item.Tur.turadi">
+                        Detay
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="pagedList">
+    @Html.PagedListPager(Model, sayfa => Url.Action("index", new { sayfa }), PagedListRenderOptions.PageNumbersOnly)
+</div>
+
+
+
+
+
+
+
+
+
+
+@*
+
+            @*NOT: ToPagedList ifadesindeki ikinci parametre (örneğimizde 2), bir sayfada kaç kayıt listeleneceğini belirtir.
+        Ardından sayfa sayfa listeleme yapacağımız View sayfası açılır. Bunun için TurYorumlariController.cs sınıfında iken Index() metodu sağ tıklanır ve açılan menüden Go To View seçeneği tıklanır. PagedList.Mvc ve PagedList paket kütüphaneleri sayfaya eklenir. Kodların en üstüne aşağıdaki tanımlar yazılır. @using PagedList @using PagedList.Mvc
+            @model IEnumerable<MVC1.Models.TurYorumlari> şeklindeki model tanımı da @model IPagedList<MVC1.Models.TurYorumlari> şeklinde değiştirilir.
+            Liste sonunda kayıtlarımızın sayfa numaralandırmasını gösterecek ve ilgili sayfa tıklandığında, o sayfanın kayıtlarını listelemek için, TurYorumlariController’ındaki Index() metodunu tetikleyecek kodları </table> etiketinden sonra yazalım. <div class="pagedList"> @Html.PagedListPager(Model, sayfa => Url.Action("index", new { sayfa }), PagedListRenderOptions.PageNumbersOnly) </div>
+            Son olarak alan başlıklarını listeleyen komut ifadelerini düzenleyelim. Örnek olarak ilk alan başlığını listeleyen komutun eski ve yeni şekilleri verilmiştir. @* Eski kod
+    Html.DisplayNameFor(model => model.Tur.turadi)
+     Yeni kod
+    Html.DisplayNameFor(model => model.FirstOrDefault().Tur.turadi)
+
+
+
+*@
+
+
+
+
+
+
+<!-- Detay Modal -->
+<div class="modal fade" id="detayModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Yorum Detayı</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        Tur Adı
+                    </div> 91
+
+                    <div class="col-md-9">
+                        <span class="yorum_turadi"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Adı Soyadı
+                    </div>
+                    <div class="col-md-9">
+                        <span class="yorum_adisoyadi"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        E-Posta
+                    </div>
+                    <div class="col-md-9">
+                        <span class="yorum_eposta"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Tarih
+                    </div>
+                    <div class="col-md-9">
+                        <span class="yorum_tarih"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Yorum
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="yorum_yorum form-control" readonly rows="8" cols="40"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Onay
+                    </div>
+                    <div class="col-md-9">
+                        <input type="checkbox" class="yorum_onay">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Detay Modal Sonu-->
+<!-- Duzelt Modal -->
+<div class="modal fade" id="duzeltModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Yorum Düzelt</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        Tur Adı
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control yrm_turadi" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Adı Soyadı
+
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control yrm_adisoyadi">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        E-Posta
+                    </div>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control yrm_eposta">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Tarih
+                    </div>
+                    <div class="col-md-9">
+                        <input type="date" class="form-control yrm_tarih">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Yorum
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control yrm_yorum" rows="8" cols="40"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        Onay
+                    </div>
+                    <div class="col-md-9">
+                        <input type="checkbox" class="checkbox yrm_onay">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success kaydet" data-dismiss="modal">Kaydet</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Duzelt Modal Sonu-->
+@*
+    Düzeltme, Silme ile Detay görüntüleme ve onay işlemi sayfaları Jquery ve Ajax metodları ile yazılacaktır. Bundaki amaç Jquery ve Ajax ile sayfayı yenilemeye gerek kalmadan istemci taraflı düzenlemeye örnek vermektir. Index.cshtml sayfasının kodlarına dikkat edilirse, butonlar oluşturulurken ilgili Jquery fonksiyonuna bilgi gönderecek şekilde düzenlendiler.
+*@
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var id;
+
+
+
+
+        //Düzelt butonu ile modal form açılır ve o kaydın bilgileri modal forma aktarılır
+        $(".kayitDuzelt").click(function () {
+            id = $(this).data("yorumid");
+            var url = '@Url.Action("yorumoku", "turyorumlari")';
+
+            $.getJSON(url, { yorum_ID: id }, function (data) {
+                if (data) {
+                    $(".yrm_adisoyadi").val(data.y_adsoyad);
+                    $(".yrm_eposta").val(data.y_eposta);
+                    $(".yrm_tarih").val(data.y_tarih);
+                    $(".yrm_turadi").val(data.y_turadi);
+                    $(".yrm_yorum").val(data.y_yorum);
+                    $(".yrm_onay").prop('checked', data.y_onay);
+                    $("#duzeltModal").modal("show");
+                } else {
+                    alert("İşlemde hata oluştu!");
+                }
+            });
+        });
+
+
+
+        //Düzelt modal formundaki Kaydet butonu tıklanınca değişiklikler veritabanına kaydedilir
+        $(".kaydet").click(function () {
+            var m_adsoyad = $(".yrm_adisoyadi").val();
+            var m_eposta = $(".yrm_eposta").val();
+            var m_tarih = $(".yrm_tarih").val();
+            var m_yorum = $(".yrm_yorum").val();
+            var m_onay = $(".yrm_onay").prop('checked');
+            var postData = {
+                id: id,
+                adsoyad: m_adsoyad,
+                eposta: m_eposta,
+                tarih: m_tarih,
+                yorum: m_yorum,
+                onay: m_onay
+            };
+
+            var options = {};
+            options.url = '@Url.Action("duzelt", "turyorumlari")';
+            options.type = "POST";
+            options.data = JSON.stringify(postData);
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (msg) {
+                alert(msg);
+                //Sayfadaki kayıt güncellenir
+                $(".onay-" + id).find(".check-box").prop("checked", m_onay);
+                var parts = m_tarih.split('-'); //yyyy-MM-dd şeklindeki tarih
+                var yeni_tarih = parts[2] + '.' + parts[1] + '.' + parts[0]; //dd.MM.yyyy şekline dönüştürülür
+                $(".tarih-" + id).text(yeni_tarih);
+                $(".adsoyad-" + id).text(m_adsoyad);
+                //Detay butonunun data değerleri güncellenir
+                $("#" + id).attr("data-adisoyadi", m_adsoyad);
+                $("#" + id).attr("data-eposta", m_eposta);
+                $("#" + id).attr("data-tarih", yeni_tarih);
+                $("#" + id).attr("data-yorum", m_yorum);
+                $("#" + id).attr("data-onay", m_onay);
+            };
+            options.error = function () {
+                alert("Düzeltme işleminde hata oluştu!");
+            };
+            $.ajax(options);
+        });
+
+
+
+
+
+
+
+
+
+        //===============================
+
+        //Detay butonu ile modal form açılır ve o kaydın bilgileri modal forma aktarılır
+        $(".kayitDetay").click(function () {
+            id = $(this).attr("data-yorumid");
+            $(".yorum_adisoyadi").text($(this).attr("data-adisoyadi"));
+            $(".yorum_eposta").text($(this).attr("data-eposta"));
+            $(".yorum_tarih").text($(this).attr("data-tarih"));
+            $(".yorum_turadi").text($(this).attr("data-turadi"));
+            $(".yorum_yorum").text($(this).attr("data-yorum"));
+            $(".yorum_onay").prop('checked', $(".onay-" + id).find(".check-box").prop('checked'));
+            $("#detayModal").modal("show");
+        });
+        //Detay modal formdaki onay işaret kutusu tıklanınca veritabanındaki onay alanı güncellenir
+        $(".yorum_onay").click(function () {
+            var secili = $(".yorum_onay").prop('checked');
+            var postData = {
+                yorum_ID: id,
+                durum: secili
+            };
+
+            var options = {};
+            options.url = '@Url.Action("onay", "turyorumlari")';
+            options.type = "POST";
+            options.data = JSON.stringify(postData);
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (msg) {
+                alert(msg);
+                //Sayfadaki kaydın işaret kutusu güncellenir
+                $(".onay-" + id).find(".check-box").prop("checked", secili);
+            };
+            options.error = function () {
+                alert("Onay işleminde hata oluştu!");
+            };
+            $.ajax(options);
+        });
+
+
+
+
+
+
+
+
+
+
+        //=================SİLME İŞLEMİ================
+        //Sil butonuna tıklanınca kayıt hem veritabanından hem ekrandan silinir
+        $(".kayitSil").click(function () {
+            var sec = $(this);
+            var durum = confirm("* " + sec.data("adisoyadi") + " * tarafından yapılan yorum silinsin mi?");
+            if (durum) {
+                var id = sec.data("yorumid");
+                var postData = {
+                    yorum_ID: id
+                };
+
+                var options = {};
+                options.url = '@Url.Action("sil", "turyorumlari")';
+                options.type = "POST";
+                options.data = JSON.stringify(postData);
+                options.contentType = "application/json";
+                options.dataType = "json";
+                options.success = function (msg) {
+                    alert(msg);
+                    //Kaydın olduğu satır ekrandan silinir
+                    sec.parents("tr").remove();
+                };
+                options.error = function () {
+                    alert("Silme işleminde hata oluştu!");
+                };
+                $.ajax(options);
+            }
+        });
+    });
+</script>
